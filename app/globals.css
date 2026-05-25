@@ -1,0 +1,239 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Google Fonts are loaded via next/font in layout.tsx ─── */
+
+/* ─── CSS Custom Properties ─── */
+:root {
+  --bg: #060713;
+  --bg-surface: #0b0e22;
+  --surface: rgba(255, 255, 255, 0.04);
+  --surface-hover: rgba(255, 255, 255, 0.07);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.18);
+  --text: #f0f0f8;
+  --text-muted: #7a7a9a;
+  --text-subtle: #4a4a6a;
+  --accent: #2563eb;
+  --accent2: #06b6d4;
+  --accent3: #00f5d4;
+  --gradient: linear-gradient(135deg, #2563eb, #06b6d4);
+  --gradient2: linear-gradient(135deg, #00f5d4, #2563eb);
+}
+
+[data-theme='light'] {
+  --bg: #f5f5ff;
+  --bg-surface: #ededfa;
+  --surface: rgba(0, 0, 0, 0.04);
+  --surface-hover: rgba(0, 0, 0, 0.07);
+  --border: rgba(0, 0, 0, 0.1);
+  --border-hover: rgba(0, 0, 0, 0.22);
+  --text: #0d0d1a;
+  --text-muted: #4a4a6e;
+  --text-subtle: #8a8aaa;
+  --accent: #1d4ed8;
+  --accent2: #0891b2;
+  --accent3: #0d9488;
+  --gradient: linear-gradient(135deg, #1d4ed8, #0891b2);
+  --gradient2: linear-gradient(135deg, #0d9488, #1d4ed8);
+}
+
+/* ─── Base Reset ─── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-dm-sans), sans-serif;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ─── Custom Scrollbar ─── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-hover);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* ─── Noise Texture Overlay ─── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.018;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+/* ─── Gradient Text Utility ─── */
+.gradient-text {
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-2 {
+  background: var(--gradient2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Glass Card Utility ─── */
+.glass-card {
+  background: var(--surface);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.glass-card:hover {
+  background: var(--surface-hover);
+  border-color: var(--border-hover);
+}
+
+/* ─── Section Label Utility ─── */
+.section-label {
+  font-family: var(--font-dm-mono), monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: inline-block;
+  margin-bottom: 0.75rem;
+}
+
+/* ─── Gradient Border Ring ─── */
+.gradient-ring {
+  position: relative;
+  border-radius: 50%;
+  padding: 3px;
+  background: var(--gradient);
+  animation: spinRing 6s linear infinite;
+}
+
+.gradient-ring::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: var(--gradient);
+  z-index: -1;
+  filter: blur(12px);
+  opacity: 0.6;
+}
+
+@keyframes spinRing {
+  0% {
+    background: linear-gradient(0deg, #2563eb, #06b6d4);
+  }
+  25% {
+    background: linear-gradient(90deg, #2563eb, #06b6d4);
+  }
+  50% {
+    background: linear-gradient(180deg, #06b6d4, #2563eb);
+  }
+  75% {
+    background: linear-gradient(270deg, #06b6d4, #2563eb);
+  }
+  100% {
+    background: linear-gradient(360deg, #2563eb, #06b6d4);
+  }
+}
+
+/* ─── Skill Chip ─── */
+.skill-chip {
+  font-family: var(--font-dm-mono), monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+  white-space: nowrap;
+}
+
+.skill-chip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(37, 99, 235, 0.08);
+}
+
+/* ─── Animated Gradient Border for "Learning" card ─── */
+.learning-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.learning-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  padding: 1px;
+  background: var(--gradient2);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ─── Language Bar ─── */
+.lang-bar {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--gradient);
+  transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ─── Focus Ring ─── */
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+/* ─── Reduced Motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
