@@ -49,13 +49,13 @@ export const metadata: Metadata = {
     title: 'Kirlosh J — Software Developer',
     description: 'Aspiring Software Developer | C, C++, Python, Java | Chennai',
     type: 'website',
-    images: ['https://avatars.githubusercontent.com/u/205190181?v=4'],
+    images: ['/images/profile.jpg'],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Kirlosh J — Software Developer',
     description: 'Aspiring Software Developer from Chennai | Open to internships',
-    images: ['https://avatars.githubusercontent.com/u/205190181?v=4'],
+    images: ['/images/profile.jpg'],
   },
 }
 

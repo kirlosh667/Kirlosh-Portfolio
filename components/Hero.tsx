@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import Image from 'next/image'
 import { Github, Linkedin, Mail, ChevronDown } from 'lucide-react'
@@ -14,8 +15,24 @@ const revealVariant = {
   }),
 }
 
+const IMAGES = [
+  '/images/profile.jpg',
+  '/images/keyboard.jpg',
+]
+
 export default function Hero() {
   const shouldReduceMotion = useReducedMotion()
+  const [imageIndex, setImageIndex] = useState(0)
+  const [isFlipped, setIsFlipped] = useState(false)
+  const [hasError, setHasError] = useState(false)
+
+  const toggleAvatar = () => {
+    setIsFlipped((prev) => !prev)
+    setTimeout(() => {
+      setHasError(false)
+      setImageIndex((prev) => (prev + 1) % IMAGES.length)
+    }, 150)
+  }
 
   const effectiveVariant = shouldReduceMotion
     ? {
@@ -183,33 +200,46 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0, x: 60 }}
             animate={{ opacity: 1, x: 0 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1], delay: 0.3 }}
-            className="hidden lg:flex flex-shrink-0 flex-col items-center"
+            onClick={toggleAvatar}
+            className="hidden lg:flex flex-shrink-0 flex-col items-center cursor-pointer select-none"
+            title="Click to toggle profile photo"
+            style={{ perspective: 1000 }}
           >
-            <div className="gradient-ring">
-              <div className="rounded-full overflow-hidden w-56 h-56 xl:w-64 xl:h-64 relative">
-                <Image
-                  src="https://avatars.githubusercontent.com/u/205190181?v=4"
-                  alt="Kirlosh J — Software Developer"
-                  fill
-                  sizes="(max-width: 1280px) 224px, 256px"
-                  className="object-cover"
-                  priority
-                  onError={(e) => {
-                    // Fallback: hide image and show initials
-                    const target = e.target as HTMLImageElement
-                    target.style.display = 'none'
-                    const parent = target.parentElement
-                    if (parent && !parent.querySelector('.avatar-fallback')) {
-                      const fallback = document.createElement('div')
-                      fallback.className = 'avatar-fallback w-full h-full flex items-center justify-center text-4xl font-syne font-bold gradient-text'
-                      fallback.textContent = 'JK'
-                      parent.appendChild(fallback)
-                    }
-                  }}
-                />
+            <motion.div
+              animate={{ rotateY: isFlipped ? 180 : 0 }}
+              transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+              style={{ transformStyle: 'preserve-3d' }}
+              className="gradient-ring"
+            >
+              <div
+                className="rounded-full overflow-hidden w-56 h-56 xl:w-64 xl:h-64 relative"
+              >
+                {hasError ? (
+                  <div
+                    className="avatar-fallback w-full h-full flex items-center justify-center text-4xl font-syne font-bold gradient-text"
+                    style={{ transform: isFlipped ? 'rotateY(180deg)' : 'none' }}
+                  >
+                    JK
+                  </div>
+                ) : (
+                  <Image
+                    src={IMAGES[imageIndex]}
+                    alt="Kirlosh J — Software Developer"
+                    fill
+                    sizes="(max-width: 1280px) 224px, 256px"
+                    className="object-cover"
+                    style={{
+                      transform: isFlipped ? 'rotateY(180deg)' : 'none',
+                    }}
+                    priority
+                    onError={() => setHasError(true)}
+                  />
+                )}
               </div>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
 
